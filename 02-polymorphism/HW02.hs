@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 module HW02 where
+import Data.List
 
 -- Mastermind -----------------------------------------
 
@@ -23,17 +24,21 @@ colors = [Red, Green, Blue, Yellow, Orange, Purple]
 
 -- Get the number of exact matches between the actual code and the guess
 exactMatches :: Code -> Code -> Int
-exactMatches = undefined
+exactMatches (x:xs) (y:ys) = (if x==y then 1 else 0) + exactMatches xs ys
+exactMatches _ _ = 0
+        
 
 -- Exercise 2 -----------------------------------------
 
--- For each peg in xs, count how many times is occurs in ys
+-- For each color, count how many times it's repeated in xs 
 countColors :: Code -> [Int]
-countColors = undefined
+countColors xs = map (countAColor xs) colors
+    where countAColor :: [Peg] -> Peg -> Int
+          countAColor ys color = length (filter (color==) ys)
 
 -- Count number of matches between the actual code and the guess
 matches :: Code -> Code -> Int
-matches = undefined
+matches xs ys = foldl' (+) 0 (zipWith min (countColors xs) (countColors ys))
 
 -- Exercise 3 -----------------------------------------
 
